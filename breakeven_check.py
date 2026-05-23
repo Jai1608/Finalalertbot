@@ -48,16 +48,22 @@ def save_alerted(alerted):
 # FETCH BTC PRICE from Binance (free, no API key)
 # ============================================================
 def get_btc_price():
-    try:
-        r = requests.get(
-            "https://api.binance.com/api/v3/ticker/price",
-            params={"symbol": "BTCUSDT"},
-            timeout=5
-        )
-        return float(r.json()["price"])
-    except Exception as e:
-        print(f"[ERROR] Price fetch failed: {e}")
-        return None
+    apis = [
+        ("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd",
+         lambda r: r["bitcoin"]["usd"]),
+        ("https://api.kraken.com/0/public/Ticker?pair=XBTUSD",
+         lambda r: float(r["result"]["XXBTZUSD"]["c"][0])),
+    ]
+    for url, parser in apis:
+        try:
+            r = requests.get(url, timeout=5)
+            price = parser(r.json())
+            print(f"[PRICE] BTC = ${price:,.2f}")
+            return float(price)
+        except Exception as e:
+            print(f"[WARN] API failed, trying next: {e}")
+    print("[ERROR] All price APIs failed.")
+    return None
 
 # ============================================================
 # MAKE VOICE CALL via Twilio
