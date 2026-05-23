@@ -19,8 +19,8 @@ TELEGRAM_CHAT_ID   = os.environ["TELEGRAM_CHAT_ID"]
 # Format: { price: "label" }
 # ============================================================
 BREAKEVEN_LEVELS = {
-    83000: "BTC Long Breakeven at 83,000",
-    73000: "BTC Short Breakeven at 73,000",
+    74650: "BTC Long Breakeven at 83,000",
+    74600: "BTC Short Breakeven at 73,000",
     90000: "BTC Target at 90,000",
     65000: "BTC Support at 65,000",
     # ADD MORE:
